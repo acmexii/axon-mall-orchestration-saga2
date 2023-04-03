@@ -21,9 +21,13 @@ public class OrderSagaSaga {
     private transient CommandGateway commandGateway;
 
     @StartSaga
-    @SagaEventHandler(associationProperty = "#correlation-key")
+    @SagaEventHandler(associationProperty = "orderId")
     public void onOrderPlaced(OrderPlacedEvent event) {
         DecreaseStockCommand command = new DecreaseStockCommand();
+        command.setProductId(event.getProductId());
+        command.setStock(event.getQty());
+
+        //SagaLifecycle.associateWith("paymentId", paymentId);
 
         commandGateway
             .send(command)
