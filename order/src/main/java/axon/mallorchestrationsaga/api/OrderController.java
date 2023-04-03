@@ -69,23 +69,20 @@ public class OrderController {
         return commandGateway.send(updateStatusCommand);
     }
 
-    @RequestMapping(value = "/orders", method = RequestMethod.PUT)
+    @RequestMapping(
+        value = "/orders/{id}/ordercancel",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
     public CompletableFuture orderCancel(
+        @PathVariable("id") String id,
         @RequestBody OrderCancelCommand orderCancelCommand
     ) throws Exception {
         System.out.println("##### /order/orderCancel  called #####");
 
+        orderCancelCommand.setOrderId(id);
         // send command
-        return commandGateway
-            .send(orderCancelCommand)
-            .thenApply(id -> {
-                OrderAggregate resource = new OrderAggregate();
-                BeanUtils.copyProperties(orderCancelCommand, resource);
-
-                resource.setOrderId((String) id);
-
-                return new ResponseEntity<>(hateoas(resource), HttpStatus.OK);
-            });
+        return commandGateway.send(orderCancelCommand);
     }
 
     @Autowired
@@ -110,6 +107,12 @@ public class OrderController {
             Link
                 .of("/orders/" + resource.getOrderId() + "/updatestatus")
                 .withRel("updatestatus")
+        );
+
+        model.add(
+            Link
+                .of("/orders/" + resource.getOrderId() + "/ordercancel")
+                .withRel("ordercancel")
         );
 
         model.add(
