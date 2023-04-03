@@ -56,6 +56,22 @@ public class DeliveryController {
             });
     }
 
+    @RequestMapping(
+        value = "/deliveries/{id}/canceldelivery",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public CompletableFuture cancelDelivery(
+        @PathVariable("id") String id,
+        @RequestBody CancelDeliveryCommand cancelDeliveryCommand
+    ) throws Exception {
+        System.out.println("##### /delivery/cancelDelivery  called #####");
+
+        cancelDeliveryCommand.setDeliveryId(id);
+        // send command
+        return commandGateway.send(cancelDeliveryCommand);
+    }
+
     @Autowired
     EventStore eventStore;
 
@@ -76,6 +92,16 @@ public class DeliveryController {
 
         model.add(
             Link.of("/deliveries/" + resource.getDeliveryId()).withSelfRel()
+        );
+
+        model.add(
+            Link
+                .of(
+                    "/deliveries/" +
+                    resource.getDeliveryId() +
+                    "/canceldelivery"
+                )
+                .withRel("canceldelivery")
         );
 
         model.add(

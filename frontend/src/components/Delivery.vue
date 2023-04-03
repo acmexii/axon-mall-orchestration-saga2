@@ -69,6 +69,20 @@
         </v-card-actions>
         <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn
+                    v-if="!editMode"
+                    color="deep-purple lighten-2"
+                    text
+                    @click="openCancelDelivery"
+            >
+                CancelDelivery
+            </v-btn>
+            <v-dialog v-model="cancelDeliveryDiagram" width="500">
+                <CancelDeliveryCommand
+                        @closeDialog="closeCancelDelivery"
+                        @cancelDelivery="cancelDelivery"
+                ></CancelDeliveryCommand>
+            </v-dialog>
         </v-card-actions>
 
         <v-snackbar
@@ -111,6 +125,7 @@
                 timeout: 5000,
                 text: ''
             },
+            cancelDeliveryDiagram: false,
         }),
         created(){
             if(this.isNew) return;
@@ -274,6 +289,32 @@
             },
             change(){
                 this.$emit('input', this.value);
+            },
+            async cancelDelivery(params) {
+                try {
+                    if(!this.offline) {
+                        var temp = await axios.put(axios.fixUrl(this.value._links['canceldelivery'].href), params)
+                        for(var k in temp.data) {
+                            this.value[k]=temp.data[k];
+                        }
+                    }
+
+                    this.editMode = false;
+                    this.closeCancelDelivery();
+                } catch(e) {
+                    this.snackbar.status = true
+                    if(e.response && e.response.data.message) {
+                        this.snackbar.text = e.response.data.message
+                    } else {
+                        this.snackbar.text = e
+                    }
+                }
+            },
+            openCancelDelivery() {
+                this.cancelDeliveryDiagram = true;
+            },
+            closeCancelDelivery() {
+                this.cancelDeliveryDiagram = false;
             },
 
 

@@ -43,6 +43,9 @@ public class DeliveryAggregate {
         apply(event);
     }
 
+    @CommandHandler
+    public void handle(CancelDeliveryCommand command) {}
+
     private String createUUID() {
         return UUID.randomUUID().toString();
     }
@@ -52,5 +55,11 @@ public class DeliveryAggregate {
         BeanUtils.copyProperties(event, this);
         //TODO: business logic here
         setStatus("DeliveryStarted");
+    }
+
+    @EventSourcingHandler
+    public void on(DeliveryCancelledEvent event) {
+        //TODO: business logic here
+
     }
 }
