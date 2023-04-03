@@ -32,7 +32,7 @@ public class ProductAggregate {
     public void handle(DecreaseStockCommand command) {
         StockDecreasedEvent event = new StockDecreasedEvent();
         BeanUtils.copyProperties(command, event);
-
+        if(this.getStock() < command.getStock()) throw new IllegalStateException("Out of Stock. !");
         apply(event);
     }
 
@@ -62,19 +62,19 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(StockDecreasedEvent event) {
         //TODO: business logic here
-
+        setStock(getStock() - event.getStock());
     }
 
     @EventSourcingHandler
     public void on(ProductRegisteredEvent event) {
         BeanUtils.copyProperties(event, this);
         //TODO: business logic here
-
+        
     }
 
     @EventSourcingHandler
     public void on(StockIncreasedEvent event) {
         //TODO: business logic here
-        getStock(event.get
+        setStock(getStock() + event.getStock());
     }
 }
