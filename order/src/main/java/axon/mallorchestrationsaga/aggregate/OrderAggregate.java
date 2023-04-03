@@ -51,7 +51,12 @@ public class OrderAggregate {
     }
 
     @CommandHandler
-    public void handle(OrderCancelCommand command) {}
+    public void handle(OrderCancelCommand command) {
+        OrderCancelledEvent event = new OrderCancelledEvent();
+        BeanUtils.copyProperties(command, event);
+
+        apply(event);
+    }
 
     private String createUUID() {
         return UUID.randomUUID().toString();

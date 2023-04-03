@@ -93,6 +93,11 @@ public class OrderStatusQueryController {
                 .of("/orders/" + resource.getOrderId() + "/updatestatus")
                 .withRel("updatestatus")
         );
+        model.add(
+            Link
+                .of("/orders/" + resource.getOrderId() + "/ordercancel")
+                .withRel("ordercancel")
+        );
 
         model.add(
             Link

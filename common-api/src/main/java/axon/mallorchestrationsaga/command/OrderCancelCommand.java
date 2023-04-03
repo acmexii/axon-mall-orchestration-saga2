@@ -11,4 +11,6 @@ public class OrderCancelCommand {
 
     @TargetAggregateIdentifier
     private String orderId;
+
+    private String orderId;
 }
