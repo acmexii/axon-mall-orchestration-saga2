@@ -11,6 +11,4 @@ public class CancelDeliveryCommand {
 
     @TargetAggregateIdentifier
     private String deliveryId;
-
-    private String deliveryId;
 }

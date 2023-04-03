@@ -20,6 +20,7 @@
             <String label="ProductId" v-model="value.productId" :editMode="editMode"/>
             <String label="ProductName" v-model="value.productName" :editMode="editMode"/>
             <Number label="Stock" v-model="value.stock" :editMode="editMode"/>
+            <String label="OrderId" v-model="value.orderId" :editMode="editMode"/>
 
             <EventViewer
                 v-if="value._links && value._links.events"

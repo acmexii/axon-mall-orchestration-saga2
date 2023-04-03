@@ -7,6 +7,7 @@
 
         <v-card-text>
             <Number label="Stock" v-model="value.stock" :editMode="editMode"/>
+            <String label="OrderId" v-model="value.orderId" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -43,6 +44,7 @@
         }),
         created() {
             this.value.stock = 0;
+            this.value.orderId = '';
         },
         watch: {
         },

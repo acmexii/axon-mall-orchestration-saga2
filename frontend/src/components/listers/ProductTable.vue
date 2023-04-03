@@ -69,6 +69,7 @@
                     { text: "productId", value: "productId" },
                     { text: "productName", value: "productName" },
                     { text: "stock", value: "stock" },
+                    { text: "orderId", value: "orderId" },
                 ],
             product : [],
             newValue: {},
@@ -89,6 +90,7 @@
                 'productId': '',
                 'productName': '',
                 'stock': 0,
+                'orderId': '',
             }
         },
         methods: {
