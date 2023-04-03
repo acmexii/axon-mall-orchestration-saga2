@@ -72,23 +72,20 @@ public class ProductController {
             });
     }
 
-    @RequestMapping(value = "/products", method = RequestMethod.PUT)
+    @RequestMapping(
+        value = "/products/{id}/increasestock",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
     public CompletableFuture increaseStock(
+        @PathVariable("id") String id,
         @RequestBody IncreaseStockCommand increaseStockCommand
     ) throws Exception {
         System.out.println("##### /product/increaseStock  called #####");
 
+        increaseStockCommand.setProductId(id);
         // send command
-        return commandGateway
-            .send(increaseStockCommand)
-            .thenApply(id -> {
-                ProductAggregate resource = new ProductAggregate();
-                BeanUtils.copyProperties(increaseStockCommand, resource);
-
-                resource.setProductId((String) id);
-
-                return new ResponseEntity<>(hateoas(resource), HttpStatus.OK);
-            });
+        return commandGateway.send(increaseStockCommand);
     }
 
     @Autowired
@@ -115,6 +112,12 @@ public class ProductController {
             Link
                 .of("/products/" + resource.getProductId() + "/decreasestock")
                 .withRel("decreasestock")
+        );
+
+        model.add(
+            Link
+                .of("/products/" + resource.getProductId() + "/increasestock")
+                .withRel("increasestock")
         );
 
         model.add(
