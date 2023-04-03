@@ -55,7 +55,7 @@ Head to http://localhost:8088 with a web browser
 ```
 - product
 ```
- http :8088/products productId="productId" productName="productName" stock="stock" 
+ http :8088/products productId="productId" productName="productName" stock="stock" orderId="orderId" 
 ```
 - delivery
 ```

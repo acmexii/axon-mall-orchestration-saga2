@@ -12,4 +12,5 @@ public class RegisterCommand {
     private String productId; // Please comment here if you want user to enter the id directly
     private String productName;
     private Integer stock;
+    private String orderId;
 }

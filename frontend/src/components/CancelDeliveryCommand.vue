@@ -6,7 +6,6 @@
         </v-card-title>
 
         <v-card-text>
-            <String label="DeliveryId" v-model="value.deliveryId" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -42,7 +41,6 @@
             value: {},
         }),
         created() {
-            this.value.deliveryId = '';
         },
         watch: {
         },

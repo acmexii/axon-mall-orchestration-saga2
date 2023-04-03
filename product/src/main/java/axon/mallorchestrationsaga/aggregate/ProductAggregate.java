@@ -25,6 +25,7 @@ public class ProductAggregate {
 
     private String productName;
     private Integer stock;
+    private String orderId;
 
     public ProductAggregate() {}
 

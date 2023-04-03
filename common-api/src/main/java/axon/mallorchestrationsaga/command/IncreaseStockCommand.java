@@ -13,4 +13,5 @@ public class IncreaseStockCommand {
     private String productId;
 
     private Integer stock;
+    private String orderId;
 }

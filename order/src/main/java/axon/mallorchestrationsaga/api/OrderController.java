@@ -74,12 +74,10 @@ public class OrderController {
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
-    public CompletableFuture orderCancel(
-        @PathVariable("id") String id,
-        @RequestBody OrderCancelCommand orderCancelCommand
-    ) throws Exception {
+    public CompletableFuture orderCancel(@PathVariable("id") String id)
+        throws Exception {
         System.out.println("##### /order/orderCancel  called #####");
-
+        OrderCancelCommand orderCancelCommand = new OrderCancelCommand();
         orderCancelCommand.setOrderId(id);
         // send command
         return commandGateway.send(orderCancelCommand);

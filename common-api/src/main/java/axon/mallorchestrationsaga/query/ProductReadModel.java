@@ -18,4 +18,6 @@ public class ProductReadModel {
     private String productName;
 
     private Integer stock;
+
+    private String orderId;
 }

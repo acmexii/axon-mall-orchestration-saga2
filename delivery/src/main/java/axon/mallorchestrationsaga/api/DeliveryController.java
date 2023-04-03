@@ -61,12 +61,10 @@ public class DeliveryController {
         method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
-    public CompletableFuture cancelDelivery(
-        @PathVariable("id") String id,
-        @RequestBody CancelDeliveryCommand cancelDeliveryCommand
-    ) throws Exception {
+    public CompletableFuture cancelDelivery(@PathVariable("id") String id)
+        throws Exception {
         System.out.println("##### /delivery/cancelDelivery  called #####");
-
+        CancelDeliveryCommand cancelDeliveryCommand = new CancelDeliveryCommand();
         cancelDeliveryCommand.setDeliveryId(id);
         // send command
         return commandGateway.send(cancelDeliveryCommand);
