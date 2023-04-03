@@ -49,4 +49,27 @@ public class DeliveryListCQRSHandlerReusingAggregate {
 
         queryUpdateEmitter.emit(DeliveryListQuery.class, query -> true, entity);
     }
+
+    @EventHandler
+    public void whenDeliveryCancelled_then_UPDATE(DeliveryCancelledEvent event)
+        throws Exception {
+        repository
+            .findById(event.getDeliveryId())
+            .ifPresent(entity -> {
+                DeliveryAggregate aggregate = new DeliveryAggregate();
+
+                BeanUtils.copyProperties(entity, aggregate);
+                aggregate.on(event);
+                BeanUtils.copyProperties(aggregate, entity);
+
+                repository.save(entity);
+
+                queryUpdateEmitter.emit(
+                    DeliveryListSingleQuery.class,
+                    query ->
+                        query.getDeliveryId().equals(event.getDeliveryId()),
+                    entity
+                );
+            });
+    }
 }

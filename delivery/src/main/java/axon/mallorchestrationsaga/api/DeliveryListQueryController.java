@@ -92,6 +92,16 @@ public class DeliveryListQueryController {
 
         model.add(
             Link
+                .of(
+                    "/deliveries/" +
+                    resource.getDeliveryId() +
+                    "/canceldelivery"
+                )
+                .withRel("canceldelivery")
+        );
+
+        model.add(
+            Link
                 .of("/deliveries/" + resource.getDeliveryId() + "/events")
                 .withRel("events")
         );

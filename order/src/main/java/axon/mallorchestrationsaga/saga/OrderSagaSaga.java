@@ -23,7 +23,7 @@ public class OrderSagaSaga {
     @StartSaga
     @SagaEventHandler(associationProperty = "#correlation-key")
     public void onOrderPlaced(OrderPlacedEvent event) {
-        DecreaseStockCommand command = new DecreaseStockCommand();
+        StartDeliveryCommand command = new StartDeliveryCommand();
 
         commandGateway
             .send(command)
@@ -35,20 +35,20 @@ public class OrderSagaSaga {
     }
 
     @SagaEventHandler(associationProperty = "#correlation-key")
-    public void onStockDecreased(StockDecreasedEvent event) {
-        StartDeliveryCommand command = new StartDeliveryCommand();
+    public void onDeliveryStarted(DeliveryStartedEvent event) {
+        DecreaseStockCommand command = new DecreaseStockCommand();
 
         commandGateway
             .send(command)
             .exceptionally(ex -> {
-                IncreaseStockCommand increaseStockCommand = new IncreaseStockCommand();
+                CancelDeliveryCommand cancelDeliveryCommand = new CancelDeliveryCommand();
                 //
-                return commandGateway.send(increaseStockCommand);
+                return commandGateway.send(cancelDeliveryCommand);
             });
     }
 
     @SagaEventHandler(associationProperty = "#correlation-key")
-    public void onDeliveryStarted(DeliveryStartedEvent event) {
+    public void onStockDecreased(StockDecreasedEvent event) {
         UpdateStatusCommand command = new UpdateStatusCommand();
 
         commandGateway.send(command);
