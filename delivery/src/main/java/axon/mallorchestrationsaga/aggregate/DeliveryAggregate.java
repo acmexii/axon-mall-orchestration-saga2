@@ -44,7 +44,12 @@ public class DeliveryAggregate {
     }
 
     @CommandHandler
-    public void handle(CancelDeliveryCommand command) {}
+    public void handle(CancelDeliveryCommand command) {
+        DeliveryCancelledEvent event = new DeliveryCancelledEvent();
+        BeanUtils.copyProperties(command, event);
+
+        apply(event);
+    }
 
     private String createUUID() {
         return UUID.randomUUID().toString();
