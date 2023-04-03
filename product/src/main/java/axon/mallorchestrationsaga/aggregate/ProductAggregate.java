@@ -75,6 +75,6 @@ public class ProductAggregate {
     @EventSourcingHandler
     public void on(StockIncreasedEvent event) {
         //TODO: business logic here
-
+        getStock(event.get
     }
 }

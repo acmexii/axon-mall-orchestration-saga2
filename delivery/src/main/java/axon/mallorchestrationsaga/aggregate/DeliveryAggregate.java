@@ -51,6 +51,6 @@ public class DeliveryAggregate {
     public void on(DeliveryStartedEvent event) {
         BeanUtils.copyProperties(event, this);
         //TODO: business logic here
-
+        setStatus("DeliveryStarted");
     }
 }
