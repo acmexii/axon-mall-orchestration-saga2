@@ -48,7 +48,7 @@
                     @click="save"
                     v-else
             >
-                Save
+                StartDelivery
             </v-btn>
             <v-btn
                     color="deep-purple lighten-2"
@@ -69,20 +69,6 @@
         </v-card-actions>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-                    v-if="!editMode"
-                    color="deep-purple lighten-2"
-                    text
-                    @click="openStartDelivery"
-            >
-                StartDelivery
-            </v-btn>
-            <v-dialog v-model="startDeliveryDiagram" width="500">
-                <StartDeliveryCommand
-                        @closeDialog="closeStartDelivery"
-                        @startDelivery="startDelivery"
-                ></StartDeliveryCommand>
-            </v-dialog>
         </v-card-actions>
 
         <v-snackbar
@@ -125,7 +111,6 @@
                 timeout: 5000,
                 text: ''
             },
-            startDeliveryDiagram: false,
         }),
         created(){
             if(this.isNew) return;
@@ -289,27 +274,6 @@
             },
             change(){
                 this.$emit('input', this.value);
-            },
-            async startDelivery() {
-                try {
-                    if(!this.offline){
-                        var temp = await axios.post(axios.fixUrl(this.value._links[''].href))
-                        for(var k in temp.data) this.value[k]=temp.data[k];
-                    }
-
-                    this.editMode = false;
-                    
-                    this.$emit('input', this.value);
-                    this.$emit('delete', this.value);
-                
-                } catch(e) {
-                    this.snackbar.status = true
-                    if(e.response && e.response.data.message) {
-                        this.snackbar.text = e.response.data.message
-                    } else {
-                        this.snackbar.text = e
-                    }
-                }
             },
 
 

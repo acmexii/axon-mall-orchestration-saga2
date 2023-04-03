@@ -37,20 +37,23 @@ public class DeliveryController {
         this.queryGateway = queryGateway;
     }
 
-    @RequestMapping(
-        value = "/deliveries/{id}/",
-        method = RequestMethod.POST,
-        produces = "application/json;charset=UTF-8"
-    )
+    @RequestMapping(value = "/deliveries", method = RequestMethod.POST)
     public CompletableFuture startDelivery(
-        @PathVariable("id") String id,
         @RequestBody StartDeliveryCommand startDeliveryCommand
     ) throws Exception {
         System.out.println("##### /delivery/startDelivery  called #####");
 
-        startDeliveryCommand.setDeliveryId(id);
         // send command
-        return commandGateway.send(startDeliveryCommand);
+        return commandGateway
+            .send(startDeliveryCommand)
+            .thenApply(id -> {
+                DeliveryAggregate resource = new DeliveryAggregate();
+                BeanUtils.copyProperties(startDeliveryCommand, resource);
+
+                resource.setDeliveryId((String) id);
+
+                return new ResponseEntity<>(hateoas(resource), HttpStatus.OK);
+            });
     }
 
     @Autowired
@@ -73,10 +76,6 @@ public class DeliveryController {
 
         model.add(
             Link.of("/deliveries/" + resource.getDeliveryId()).withSelfRel()
-        );
-
-        model.add(
-            Link.of("/deliveries/" + resource.getDeliveryId() + "/").withRel("")
         );
 
         model.add(
