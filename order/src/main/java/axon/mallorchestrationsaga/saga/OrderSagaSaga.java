@@ -33,12 +33,12 @@ public class OrderSagaSaga {
             .send(command)
             .exceptionally(ex -> {
                 OrderCancelCommand orderCancelCommand = new OrderCancelCommand();
-                //
+                orderCancelCommand.setOrderId(event.getOrderId());
                 return commandGateway.send(orderCancelCommand);
             });
     }
 
-    @SagaEventHandler(associationProperty = "#correlation-key")
+    @SagaEventHandler(associationProperty = "productId")
     public void onStockDecreased(StockDecreasedEvent event) {
         StartDeliveryCommand command = new StartDeliveryCommand();
 
