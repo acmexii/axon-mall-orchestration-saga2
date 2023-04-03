@@ -30,8 +30,6 @@ public class OrderSagaSaga {
         command.setQty(event.getQty());
         command.setUserId(event.getUserId());
 
-        //SagaLifecycle.associateWith("deliveryId", "deliveryId");
-
         commandGateway
             .send(command)
             .exceptionally(ex -> {
@@ -41,15 +39,13 @@ public class OrderSagaSaga {
             });
     }
 
-    @SagaEventHandler(associationProperty = "deliveryId")
+    @SagaEventHandler(associationProperty = "orderId")
     public void onDeliveryStarted(DeliveryStartedEvent event) {
         DecreaseStockCommand command = new DecreaseStockCommand();
         command.setProductId(event.getProductId());
         command.setStock(event.getQty());
         command.setOrderId(event.getOrderId());
-
-        //SagaLifecycle.associateWith("productId", "productId");
-
+    
         commandGateway
             .send(command)
             .exceptionally(ex -> {
@@ -60,7 +56,7 @@ public class OrderSagaSaga {
             });
     }
 
-    @SagaEventHandler(associationProperty = "productId")
+    @SagaEventHandler(associationProperty = "orderId")
     public void onStockDecreased(StockDecreasedEvent event) {
         UpdateStatusCommand command = new UpdateStatusCommand();
         command.setOrderId(event.getOrderId());

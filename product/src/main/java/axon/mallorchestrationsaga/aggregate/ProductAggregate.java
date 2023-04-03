@@ -52,7 +52,7 @@ public class ProductAggregate {
     public void handle(IncreaseStockCommand command) {
         StockIncreasedEvent event = new StockIncreasedEvent();
         BeanUtils.copyProperties(command, event);
-        setStock(getStock() + event.getStock());
+
         apply(event);
     }
 
