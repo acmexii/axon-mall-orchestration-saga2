@@ -11,4 +11,6 @@ public class IncreaseStockCommand {
 
     @TargetAggregateIdentifier
     private String productId;
+
+    private Integer stock;
 }

@@ -45,7 +45,6 @@
                     v-else
             >
                 Register
-                IncreaseStock
             </v-btn>
             <v-btn
                     color="deep-purple lighten-2"
@@ -79,6 +78,20 @@
                         @closeDialog="closeDecreaseStock"
                         @decreaseStock="decreaseStock"
                 ></DecreaseStockCommand>
+            </v-dialog>
+            <v-btn
+                    v-if="!editMode"
+                    color="deep-purple lighten-2"
+                    text
+                    @click="openIncreaseStock"
+            >
+                IncreaseStock
+            </v-btn>
+            <v-dialog v-model="increaseStockDiagram" width="500">
+                <IncreaseStockCommand
+                        @closeDialog="closeIncreaseStock"
+                        @increaseStock="increaseStock"
+                ></IncreaseStockCommand>
             </v-dialog>
         </v-card-actions>
 
@@ -123,6 +136,7 @@
                 text: ''
             },
             decreaseStockDiagram: false,
+            increaseStockDiagram: false,
         }),
         created(){
             if(this.isNew) return;
@@ -312,6 +326,32 @@
             },
             closeDecreaseStock() {
                 this.decreaseStockDiagram = false;
+            },
+            async increaseStock(params) {
+                try {
+                    if(!this.offline) {
+                        var temp = await axios.put(axios.fixUrl(this.value._links['increasestock'].href), params)
+                        for(var k in temp.data) {
+                            this.value[k]=temp.data[k];
+                        }
+                    }
+
+                    this.editMode = false;
+                    this.closeIncreaseStock();
+                } catch(e) {
+                    this.snackbar.status = true
+                    if(e.response && e.response.data.message) {
+                        this.snackbar.text = e.response.data.message
+                    } else {
+                        this.snackbar.text = e
+                    }
+                }
+            },
+            openIncreaseStock() {
+                this.increaseStockDiagram = true;
+            },
+            closeIncreaseStock() {
+                this.increaseStockDiagram = false;
             },
 
 
