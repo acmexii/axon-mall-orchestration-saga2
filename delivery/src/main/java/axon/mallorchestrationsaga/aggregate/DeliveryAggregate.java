@@ -60,6 +60,6 @@ public class DeliveryAggregate {
     @EventSourcingHandler
     public void on(DeliveryCancelledEvent event) {
         //TODO: business logic here
-
+        setStatus("DeliveryCancelled");
     }
 }

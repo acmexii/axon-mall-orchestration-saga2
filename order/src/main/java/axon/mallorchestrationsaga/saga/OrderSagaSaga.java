@@ -7,6 +7,7 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.modelling.saga.EndSaga;
 import org.axonframework.modelling.saga.SagaEventHandler;
+import org.axonframework.modelling.saga.SagaLifecycle;
 import org.axonframework.modelling.saga.StartSaga;
 import org.axonframework.spring.stereotype.Saga;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class OrderSagaSaga {
         command.setQty(event.getQty());
         command.setUserId(event.getUserId());
 
+        //SagaLifecycle.associateWith("deliveryId", "deliveryId");
+
         commandGateway
             .send(command)
             .exceptionally(ex -> {
@@ -43,6 +46,10 @@ public class OrderSagaSaga {
         DecreaseStockCommand command = new DecreaseStockCommand();
         command.setProductId(event.getProductId());
         command.setStock(event.getQty());
+        command.setOrderId(event.getOrderId());
+
+        //SagaLifecycle.associateWith("productId", "productId");
+
         commandGateway
             .send(command)
             .exceptionally(ex -> {
@@ -56,10 +63,11 @@ public class OrderSagaSaga {
     @SagaEventHandler(associationProperty = "productId")
     public void onStockDecreased(StockDecreasedEvent event) {
         UpdateStatusCommand command = new UpdateStatusCommand();
+        command.setOrderId(event.getOrderId());
         commandGateway.send(command);
     }
 
     @EndSaga
-    @SagaEventHandler(associationProperty = "#correlation-key")
+    @SagaEventHandler(associationProperty = "orderId")
     public void onOrderCompleted(OrderCompletedEvent event) {}
 }
