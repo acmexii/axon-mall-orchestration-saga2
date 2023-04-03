@@ -9,9 +9,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 @Data
 public class StartDeliveryCommand {
 
-    @TargetAggregateIdentifier
-    private String deliveryId;
-
+    private String deliveryId; // Please comment here if you want user to enter the id directly
     private String userId;
     private String address;
     private String orderId;

@@ -6,12 +6,6 @@
         </v-card-title>
 
         <v-card-text>
-            <String label="UserId" v-model="value.userId" :editMode="editMode"/>
-            <String label="Address" v-model="value.address" :editMode="editMode"/>
-            <String label="OrderId" v-model="value.orderId" :editMode="editMode"/>
-            <String label="ProductId" v-model="value.productId" :editMode="editMode"/>
-            <Number label="Qty" v-model="value.qty" :editMode="editMode"/>
-            <String label="Status" v-model="value.status" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -47,12 +41,6 @@
             value: {},
         }),
         created() {
-            this.value.userId = '';
-            this.value.address = '';
-            this.value.orderId = '';
-            this.value.productId = '';
-            this.value.qty = 0;
-            this.value.status = '';
         },
         watch: {
         },
