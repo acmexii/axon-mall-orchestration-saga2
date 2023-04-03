@@ -61,18 +61,18 @@ public class OrderAggregate {
     public void on(OrderPlacedEvent event) {
         BeanUtils.copyProperties(event, this);
         //TODO: business logic here
-
+        setStatus("OrderPlaced");
     }
 
     @EventSourcingHandler
     public void on(OrderCompletedEvent event) {
         //TODO: business logic here
-
+        setStatus("OrderCompleted");
     }
 
     @EventSourcingHandler
     public void on(OrderCancelledEvent event) {
         //TODO: business logic here
-
+        setStatus("OrderCancelled");
     }
 }
