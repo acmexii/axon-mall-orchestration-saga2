@@ -24,6 +24,10 @@ public class OrderSagaSaga {
     @SagaEventHandler(associationProperty = "orderId")
     public void onOrderPlaced(OrderPlacedEvent event) {
         StartDeliveryCommand command = new StartDeliveryCommand();
+        command.setOrderId(event.getOrderId());
+        command.setProductId(event.getProductId());
+        command.setQty(event.getQty());
+        command.setUserId(event.getUserId());
 
         commandGateway
             .send(command)
@@ -34,23 +38,24 @@ public class OrderSagaSaga {
             });
     }
 
-    @SagaEventHandler(associationProperty = "#correlation-key")
+    @SagaEventHandler(associationProperty = "deliveryId")
     public void onDeliveryStarted(DeliveryStartedEvent event) {
         DecreaseStockCommand command = new DecreaseStockCommand();
-
+        command.setProductId(event.getProductId());
+        command.setStock(event.getQty());
         commandGateway
             .send(command)
             .exceptionally(ex -> {
                 CancelDeliveryCommand cancelDeliveryCommand = new CancelDeliveryCommand();
                 //
+                cancelDeliveryCommand.setDeliveryId(event.getDeliveryId());
                 return commandGateway.send(cancelDeliveryCommand);
             });
     }
 
-    @SagaEventHandler(associationProperty = "#correlation-key")
+    @SagaEventHandler(associationProperty = "productId")
     public void onStockDecreased(StockDecreasedEvent event) {
         UpdateStatusCommand command = new UpdateStatusCommand();
-
         commandGateway.send(command);
     }
 
